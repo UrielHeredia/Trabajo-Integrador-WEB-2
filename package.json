@@ -1,0 +1,22 @@
+{
+  "name": "trabajo-integrador-web-2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UrielHeredia/Trabajo-Integrador-WEB-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UrielHeredia/Trabajo-Integrador-WEB-2/issues"
+  },
+  "homepage": "https://github.com/UrielHeredia/Trabajo-Integrador-WEB-2#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

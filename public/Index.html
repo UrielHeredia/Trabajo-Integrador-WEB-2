@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Juego de Países - Trivia Geográfica</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Trivia Geográfica</h1>
+
+    <!-- Sección de preguntas -->
+    <section id="question-section">
+      <div id="question-box">
+        <p id="question-text">Cargando pregunta...</p>
+        <div id="flag-container" class="hidden">
+          <img id="flag-image" src="" alt="Bandera del país" />
+        </div>
+        <div id="options" class="options-container">
+          <!-- Botones de opciones se generan dinámicamente -->
+        </div>
+        <div id="feedback" class="hidden"></div>
+        <button id="next-btn" class="hidden">Siguiente Pregunta</button>
+      </div>
+    </section>
+
+    <!-- Sección de resultados -->
+    <section id="result-section" class="hidden">
+      <h2>¡Juego Terminado!</h2>
+      <p>Respuestas correctas: <span id="correct-count"></span></p>
+      <p>Respuestas incorrectas: <span id="incorrect-count"></span></p>
+      <p>Duración total: <span id="total-time"></span></p>
+      <p>Promedio por pregunta: <span id="avg-time"></span></p>
+      <button id="restart-btn">Jugar de nuevo</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
