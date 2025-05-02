@@ -1,165 +1,170 @@
-const questionText = document.getElementById("question-text");
-const optionsContainer = document.getElementById("options");
-const flagContainer = document.getElementById("flag-container");
-const flagImage = document.getElementById("flag-image");
-const feedback = document.getElementById("feedback");
-const nextBtn = document.getElementById("next-btn");
-const resultSection = document.getElementById("result-section");
-const correctCountSpan = document.getElementById("correct-count");
-const incorrectCountSpan = document.getElementById("incorrect-count");
-const totalTimeSpan = document.getElementById("total-time");
-const avgTimeSpan = document.getElementById("avg-time");
-const restartBtn = document.getElementById("restart-btn");
+// Selección de elementos del DOM
+const textoPregunta = document.getElementById("question-text");
+const contenedorOpciones = document.getElementById("options");
+const contenedorBandera = document.getElementById("flag-container");
+const imagenBandera = document.getElementById("flag-image");
+const retroalimentacion = document.getElementById("feedback");
+const botonSiguiente = document.getElementById("next-btn");
+const seccionResultados = document.getElementById("result-section");
+const cantidadCorrectas = document.getElementById("correct-count");
+const cantidadIncorrectas = document.getElementById("incorrect-count");
+const tiempoTotalSpan = document.getElementById("total-time");
+const tiempoPromedioSpan = document.getElementById("avg-time");
+const botonReiniciar = document.getElementById("restart-btn");
 
-let countries = [];
-let questionCount = 0;
-let correctCount = 0;
-let incorrectCount = 0;
-let startTime = 0;
-let questionStart = 0;
-let totalTime = 0;
+// Variables para el juego
+let paises = []; // Lista de países
+let cantidadPreguntas = 0;
+let cantidadAciertos = 0;
+let cantidadErrores = 0;
+let tiempoInicio = 0;
+let tiempoInicioPregunta = 0;
+let tiempoTotal = 0;
 
-const QUESTION_LIMIT = 10;
+const LIMITE_PREGUNTAS = 10; // Total de preguntas por partida
 
-// Pa cargar los paises
+// Cargar datos de la API de países
 fetch("https://restcountries.com/v3.1/all")
   .then(res => res.json())
   .then(data => {
-    countries = data.filter(c => c.capital && c.borders && c.name.common && c.flags);
-    startGame();
+    paises = data.filter(p => p.capital && p.borders && p.name.common && p.flags);
+    iniciarJuego(); // Inicia el juego cuando se tienen los datos
   })
   .catch(err => {
-    questionText.textContent = "Error al cargar los datos.";
+    textoPregunta.textContent = "Error al cargar datos.";
     console.error(err);
   });
 
-function startGame() {
-  questionCount = 0;
-  correctCount = 0;
-  incorrectCount = 0;
-  totalTime = 0;
-  startTime = Date.now();
-  resultSection.classList.add("hidden");
-  showNextQuestion();
+// Iniciar variables y mostrar la primera pregunta
+function iniciarJuego() {
+  cantidadPreguntas = 0;
+  cantidadAciertos = 0;
+  cantidadErrores = 0;
+  tiempoTotal = 0;
+  tiempoInicio = Date.now();
+  seccionResultados.classList.add("hidden");
+  mostrarSiguientePregunta();
 }
 
-function showNextQuestion() {
-  feedback.classList.add("hidden");
-  nextBtn.classList.add("hidden");
-  optionsContainer.innerHTML = "";
-  flagContainer.classList.add("hidden");
+// Mostrar la siguiente pregunta
+function mostrarSiguientePregunta() {
+  retroalimentacion.classList.add("hidden");
+  botonSiguiente.classList.add("hidden");
+  contenedorOpciones.innerHTML = "";
+  contenedorBandera.classList.add("hidden");
 
-  if (questionCount >= QUESTION_LIMIT) {
-    endGame();
+  if (cantidadPreguntas >= LIMITE_PREGUNTAS) {
+    finalizarJuego(); // Finaliza el juego si ya se contestaron todas
     return;
   }
 
-  questionStart = Date.now();
-  questionCount++;
+  tiempoInicioPregunta = Date.now(); // Tiempo de inicio por pregunta
+  cantidadPreguntas++;
 
-  const type = getRandomQuestionType();
-  const country = getRandomCountry();
-  let correctAnswer, question;
+  const tipo = obtenerTipoPreguntaAleatoria();
+  const pais = obtenerPaisAleatorio();
+  let respuestaCorrecta, pregunta;
+  let opciones = [];
 
-  let options = [];
-
-  //Preguntas
-  switch (type) {
+  switch (tipo) {
     case "capital":
-      question = `¿Cuál es el país de la siguiente ciudad capital: ${country.capital[0]}?`;
-      correctAnswer = country.name.common;
-      options = generateOptions(correctAnswer, "name.common");
+      pregunta = `¿Cuál es el país de la siguiente ciudad capital: ${pais.capital[0]}?`;
+      respuestaCorrecta = pais.name.common;
+      opciones = generarOpciones(respuestaCorrecta, "name.common");
       break;
 
     case "flag":
-      question = `Cual es el pais al que pertenece esta bandera:`;
-      flagContainer.classList.remove("hidden");
-      flagImage.src = country.flags.png;
-      correctAnswer = country.name.common;
-      options = generateOptions(correctAnswer, "name.common");
+      pregunta = `El país representado por esta bandera es:`;
+      contenedorBandera.classList.remove("hidden");
+      imagenBandera.src = pais.flags.png;
+      respuestaCorrecta = pais.name.common;
+      opciones = generarOpciones(respuestaCorrecta, "name.common");
       break;
 
     case "borders":
-      question = `¿Cuántos países limítrofes tiene ${country.name.common}?`;
-      correctAnswer = country.borders.length.toString();
-      options = generateOptions(correctAnswer, "borders.length", true);
+      pregunta = `¿Cuántos países limítrofes tiene ${pais.name.common}?`;
+      respuestaCorrecta = pais.borders.length.toString();
+      opciones = generarOpciones(respuestaCorrecta, "borders.length", true);
       break;
   }
 
-  questionText.textContent = question;
-
-  options.forEach(opt => {
-    const button = document.createElement("button");
-    button.classList.add("option");
-    button.textContent = opt;
-    button.onclick = () => checkAnswer(opt, correctAnswer);
-    optionsContainer.appendChild(button);
+  textoPregunta.textContent = pregunta;
+  opciones.forEach(opcion => {
+    const boton = document.createElement("button");
+    boton.classList.add("option");
+    boton.textContent = opcion;
+    boton.onclick = () => verificarRespuesta(opcion, respuestaCorrecta);
+    contenedorOpciones.appendChild(boton);
   });
 }
 
-function checkAnswer(selected, correct) {
-  const timeTaken = (Date.now() - questionStart) / 1000;
-  totalTime += timeTaken;
+// Verificar la respuesta del usuario
+function verificarRespuesta(seleccionado, correcto) {
+  const tiempoPregunta = (Date.now() - tiempoInicioPregunta) / 1000;
+  tiempoTotal += tiempoPregunta;
 
-  feedback.classList.remove("hidden");
+  retroalimentacion.classList.remove("hidden");
 
-  if (selected === correct) {
-    correctCount++;
-    feedback.textContent = "¡Correcto!";
-    feedback.style.color = "green";
+  if (seleccionado === correcto) {
+    cantidadAciertos++;
+    retroalimentacion.textContent = "¡Correcto!";
+    retroalimentacion.style.color = "green";
   } else {
-    incorrectCount++;
-    feedback.textContent = `Incorrecto. La respuesta correcta era: ${correct}`;
-    feedback.style.color = "red";
+    cantidadErrores++;
+    retroalimentacion.textContent = `Incorrecto. La respuesta correcta era: ${correcto}`;
+    retroalimentacion.style.color = "red";
   }
 
-  nextBtn.classList.remove("hidden");
-}
-// Segundos
-function endGame() {
-  const duration = (Date.now() - startTime) / 1000;
-  const average = totalTime / QUESTION_LIMIT;
-
-  correctCountSpan.textContent = correctCount;
-  incorrectCountSpan.textContent = incorrectCount;
-  totalTimeSpan.textContent = `${duration.toFixed(2)} segundos`;
-  avgTimeSpan.textContent = `${average.toFixed(2)} segundos`;
-
-  resultSection.classList.remove("hidden");
-  questionText.textContent = "Juego finalizado.";
-  optionsContainer.innerHTML = "";
-  flagContainer.classList.add("hidden");
-  feedback.classList.add("hidden");
-  nextBtn.classList.add("hidden");
+  botonSiguiente.classList.remove("hidden");
 }
 
-function generateOptions(correct, keyPath, isNumeric = false) {
-  const keys = keyPath.split(".");
-  const getValue = (obj) =>
-    keys.reduce((acc, k) => acc && acc[k], obj);
+// Mostrar resultados finales
+function finalizarJuego() {
+  const duracion = (Date.now() - tiempoInicio) / 1000;
+  const promedio = tiempoTotal / LIMITE_PREGUNTAS;
 
-  let options = new Set([correct]);
+  cantidadCorrectas.textContent = cantidadAciertos;
+  cantidadIncorrectas.textContent = cantidadErrores;
+  tiempoTotalSpan.textContent = `${duracion.toFixed(2)} segundos`;
+  tiempoPromedioSpan.textContent = `${promedio.toFixed(2)} segundos`;
 
-  while (options.size < 4) {
-    const rand = getRandomCountry();
-    let value = getValue(rand);
-    if (value === undefined) continue;
-    if (isNumeric) value = value.toString();
-    if (value !== correct) options.add(value);
+  seccionResultados.classList.remove("hidden");
+  textoPregunta.textContent = "Juego finalizado.";
+  contenedorOpciones.innerHTML = "";
+  contenedorBandera.classList.add("hidden");
+  retroalimentacion.classList.add("hidden");
+  botonSiguiente.classList.add("hidden");
+}
+
+// Generar 4 opciones aleatorias incluyendo la correcta
+function generarOpciones(correcta, claveRuta, esNumerico = false) {
+  const claves = claveRuta.split(".");
+  const obtenerValor = (obj) => claves.reduce((acc, k) => acc && acc[k], obj);
+
+  let opciones = new Set([correcta]);
+
+  while (opciones.size < 4) {
+    const aleatorio = obtenerPaisAleatorio();
+    let valor = obtenerValor(aleatorio);
+    if (valor === undefined) continue;
+    if (esNumerico) valor = valor.toString();
+    if (valor !== correcta) opciones.add(valor);
   }
 
-  const shuffled = Array.from(options).sort(() => 0.5 - Math.random());
-  return shuffled;
+  return Array.from(opciones).sort(() => 0.5 - Math.random());
 }
 
-function getRandomCountry() {
-  return countries[Math.floor(Math.random() * countries.length)];
+// Obtener país aleatorio
+function obtenerPaisAleatorio() {
+  return paises[Math.floor(Math.random() * paises.length)];
 }
 
-function getRandomQuestionType() {
-  const types = ["capital", "flag", "borders"];
-  return types[Math.floor(Math.random() * types.length)];
+// Elegir tipo de pregunta al azar
+function obtenerTipoPreguntaAleatoria() {
+  const tipos = ["capital", "flag", "borders"];
+  return tipos[Math.floor(Math.random() * tipos.length)];
 }
 
-nextBtn.addEventListener("click", showNextQuestion);
-restartBtn.addEventListener("click", startGame);
+// Eventos
+botonSiguiente.addEventListener("click", mostrarSiguientePregunta);
+botonReiniciar.addEventListener("click", iniciarJuego);
