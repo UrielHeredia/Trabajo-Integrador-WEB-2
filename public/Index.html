@@ -9,6 +9,7 @@
 <body>
   <div class="contenedor">
     <h1>Juego de Países</h1>
+
     <div id="contenedor-pregunta">
       <p id="question-text">Cargando pregunta...</p>
       <div id="flag-container" class="hidden">
@@ -27,8 +28,21 @@
       <p>Tiempo promedio por pregunta: <span id="avg-time">0</span></p>
       <button id="restart-btn" class="boton">Reiniciar Juego</button>
     </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Puntaje</th>
+          <th>Aciertos</th>
+          <th>Tiempo</th>
+        </tr>
+      </thead>
+      <tbody id="ranking-body"></tbody>
+    </table>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+

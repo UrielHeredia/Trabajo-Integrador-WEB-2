@@ -11,6 +11,7 @@ const cantidadIncorrectas = document.getElementById("incorrect-count");
 const tiempoTotalSpan = document.getElementById("total-time");
 const tiempoPromedioSpan = document.getElementById("avg-time");
 const botonReiniciar = document.getElementById("restart-btn");
+const tablaRanking = document.getElementById("ranking-body");
 
 // Variables para el juego
 let paises = []; // Lista de países
@@ -27,15 +28,16 @@ const LIMITE_PREGUNTAS = 10; // Total de preguntas por partida
 fetch("https://restcountries.com/v3.1/all")
   .then(res => res.json())
   .then(data => {
-    paises = data.filter(p => p.capital && p.borders && p.name.common && p.flags);
-    iniciarJuego(); // Inicia el juego cuando se tienen los datos
+    paises = data.filter(p => p.capital && p.capital.length > 0 && p.borders && p.name?.common && p.flags?.png);
+    if (paises.length === 0) throw new Error("No se encontraron países válidos.");
+    iniciarJuego();
+    mostrarRanking();
   })
   .catch(err => {
     textoPregunta.textContent = "Error al cargar datos.";
-    console.error(err);
+    console.error("Error al cargar datos de la API:", err);
   });
 
-// Iniciar variables y mostrar la primera pregunta
 function iniciarJuego() {
   cantidadPreguntas = 0;
   cantidadAciertos = 0;
@@ -46,7 +48,6 @@ function iniciarJuego() {
   mostrarSiguientePregunta();
 }
 
-// Mostrar la siguiente pregunta
 function mostrarSiguientePregunta() {
   retroalimentacion.classList.add("hidden");
   botonSiguiente.classList.add("hidden");
@@ -54,11 +55,11 @@ function mostrarSiguientePregunta() {
   contenedorBandera.classList.add("hidden");
 
   if (cantidadPreguntas >= LIMITE_PREGUNTAS) {
-    finalizarJuego(); // Finaliza el juego si ya se contestaron todas
+    finalizarJuego();
     return;
   }
 
-  tiempoInicioPregunta = Date.now(); // Tiempo de inicio por pregunta
+  tiempoInicioPregunta = Date.now();
   cantidadPreguntas++;
 
   const tipo = obtenerTipoPreguntaAleatoria();
@@ -98,7 +99,6 @@ function mostrarSiguientePregunta() {
   });
 }
 
-// Verificar la respuesta del usuario
 function verificarRespuesta(seleccionado, correcto) {
   const tiempoPregunta = (Date.now() - tiempoInicioPregunta) / 1000;
   tiempoTotal += tiempoPregunta;
@@ -118,7 +118,6 @@ function verificarRespuesta(seleccionado, correcto) {
   botonSiguiente.classList.remove("hidden");
 }
 
-// Mostrar resultados finales
 function finalizarJuego() {
   const duracion = (Date.now() - tiempoInicio) / 1000;
   const promedio = tiempoTotal / LIMITE_PREGUNTAS;
@@ -128,6 +127,9 @@ function finalizarJuego() {
   tiempoTotalSpan.textContent = `${duracion.toFixed(2)} segundos`;
   tiempoPromedioSpan.textContent = `${promedio.toFixed(2)} segundos`;
 
+  guardarEnRanking(cantidadAciertos * 3 + cantidadErrores * 0, cantidadAciertos, duracion);
+  mostrarRanking();
+
   seccionResultados.classList.remove("hidden");
   textoPregunta.textContent = "Juego finalizado.";
   contenedorOpciones.innerHTML = "";
@@ -136,7 +138,6 @@ function finalizarJuego() {
   botonSiguiente.classList.add("hidden");
 }
 
-// Generar 4 opciones aleatorias incluyendo la correcta
 function generarOpciones(correcta, claveRuta, esNumerico = false) {
   const claves = claveRuta.split(".");
   const obtenerValor = (obj) => claves.reduce((acc, k) => acc && acc[k], obj);
@@ -154,17 +155,36 @@ function generarOpciones(correcta, claveRuta, esNumerico = false) {
   return Array.from(opciones).sort(() => 0.5 - Math.random());
 }
 
-// Obtener país aleatorio
 function obtenerPaisAleatorio() {
   return paises[Math.floor(Math.random() * paises.length)];
 }
 
-// Elegir tipo de pregunta al azar
 function obtenerTipoPreguntaAleatoria() {
   const tipos = ["capital", "flag", "borders"];
   return tipos[Math.floor(Math.random() * tipos.length)];
 }
 
-// Eventos
+function guardarEnRanking(puntaje, aciertos, tiempo) {
+  const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+  ranking.push({ puntaje, aciertos, tiempo });
+  ranking.sort((a, b) => b.puntaje - a.puntaje || b.aciertos - a.aciertos || a.tiempo - b.tiempo);
+  localStorage.setItem("ranking", JSON.stringify(ranking.slice(0, 20)));
+}
+
+function mostrarRanking() {
+  const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+  tablaRanking.innerHTML = "";
+  ranking.forEach((entry, index) => {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${entry.puntaje}</td>
+      <td>${entry.aciertos}</td>
+      <td>${entry.tiempo.toFixed(2)}s</td>
+    `;
+    tablaRanking.appendChild(fila);
+  });
+}
+
 botonSiguiente.addEventListener("click", mostrarSiguientePregunta);
 botonReiniciar.addEventListener("click", iniciarJuego);
