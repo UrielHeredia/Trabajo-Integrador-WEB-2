@@ -188,3 +188,12 @@ function mostrarRanking() {
 
 botonSiguiente.addEventListener("click", mostrarSiguientePregunta);
 botonReiniciar.addEventListener("click", iniciarJuego);
+
+const botonResetearRanking = document.getElementById("reset-ranking-btn");
+
+botonResetearRanking.addEventListener("click", () => {
+  if (confirm("¿Estás seguro de que deseas borrar todos los rankings?")) {
+    localStorage.removeItem("ranking");
+    mostrarRanking(); // Actualiza la tabla
+  }
+});
