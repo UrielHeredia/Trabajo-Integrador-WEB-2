@@ -1,5 +1,3 @@
-/* style.css */
-
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f2f2f2;
@@ -10,6 +8,49 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
+}
+
+.pantalla-inicial {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f2f2f2;
+}
+
+.formulario-nombre {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.formulario-nombre h1 {
+  color: #007acc;
+}
+
+.formulario-nombre input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.formulario-nombre button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.formulario-nombre button:hover {
+  background-color: #005e99;
 }
 
 .contenedor {

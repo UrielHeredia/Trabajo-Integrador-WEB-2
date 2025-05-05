@@ -1,3 +1,4 @@
+
 // Selección de elementos del DOM
 const textoPregunta = document.getElementById("question-text");
 const contenedorOpciones = document.getElementById("options");
@@ -13,8 +14,14 @@ const tiempoPromedioSpan = document.getElementById("avg-time");
 const botonReiniciar = document.getElementById("restart-btn");
 const tablaRanking = document.getElementById("ranking-body");
 
+  const pantallaInicial = document.getElementById("pantalla-inicial");
+  const pantallaJuego = document.getElementById("pantalla-juego");
+  const btnComenzar = document.getElementById("btn-comenzar");
+  const inputNombre = document.getElementById("nombre-jugador");
+
 // Variables para el juego
 let paises = []; // Lista de países
+let nombreJugador = "";
 let cantidadPreguntas = 0;
 let cantidadAciertos = 0;
 let cantidadErrores = 0;
@@ -118,6 +125,21 @@ function verificarRespuesta(seleccionado, correcto) {
   botonSiguiente.classList.remove("hidden");
 }
 
+btnComenzar.addEventListener("click", () => {
+  nombreJugador = inputNombre.value.trim();
+  if (!nombreJugador) {
+    alert("Por favor, ingresa tu nombre.");
+    return;
+  }
+
+  pantallaInicial.classList.add("hidden");
+  pantallaJuego.classList.remove("hidden");
+});
+
+
+
+
+
 function finalizarJuego() {
   const duracion = (Date.now() - tiempoInicio) / 1000;
   const promedio = tiempoTotal / LIMITE_PREGUNTAS;
@@ -166,18 +188,19 @@ function obtenerTipoPreguntaAleatoria() {
 
 function guardarEnRanking(puntaje, aciertos, tiempo) {
   const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
-  ranking.push({ puntaje, aciertos, tiempo });
+  ranking.push({ jugador: nombreJugador, puntaje, aciertos, tiempo }); // AÑADIR 'jugador'
   ranking.sort((a, b) => b.puntaje - a.puntaje || b.aciertos - a.aciertos || a.tiempo - b.tiempo);
   localStorage.setItem("ranking", JSON.stringify(ranking.slice(0, 20)));
 }
 
 function mostrarRanking() {
   const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
-  tablaRanking.innerHTML = "";
+  tablaRanking.innerHTML = ""; // Limpiar tabla antes de agregar filas
   ranking.forEach((entry, index) => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
-      <td>${index + 1}</td>
+     
+      <td>${entry.jugador}</td> <!-- Mostrar el nombre del jugador -->
       <td>${entry.puntaje}</td>
       <td>${entry.aciertos}</td>
       <td>${entry.tiempo.toFixed(2)}s</td>
@@ -197,3 +220,5 @@ botonResetearRanking.addEventListener("click", () => {
     mostrarRanking(); // Actualiza la tabla
   }
 });
+
+mostrarRanking();

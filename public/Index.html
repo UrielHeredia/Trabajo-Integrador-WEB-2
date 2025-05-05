@@ -7,7 +7,16 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="contenedor">
+  <div id="pantalla-inicial" class="pantalla-inicial">
+    <div class="formulario-nombre">
+      <h1>¡Bienvenido al Juego de Países!</h1>
+      <p>Por favor, ingresa tu nombre para comenzar:</p>
+      <input type="text" id="nombre-jugador" placeholder="Tu nombre" />
+      <button id="btn-comenzar">Comenzar</button>
+    </div>
+  </div>
+
+  <div id="pantalla-juego" class="contenedor hidden">
     <h1>Juego de Países</h1>
 
     <div id="contenedor-pregunta">
@@ -32,7 +41,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>Jugador</th>
           <th>Puntaje</th>
           <th>Aciertos</th>
           <th>Tiempo</th>
