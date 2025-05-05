@@ -13,11 +13,11 @@ const tiempoTotalSpan = document.getElementById("total-time");
 const tiempoPromedioSpan = document.getElementById("avg-time");
 const botonReiniciar = document.getElementById("restart-btn");
 const tablaRanking = document.getElementById("ranking-body");
-
-  const pantallaInicial = document.getElementById("pantalla-inicial");
-  const pantallaJuego = document.getElementById("pantalla-juego");
-  const btnComenzar = document.getElementById("btn-comenzar");
-  const inputNombre = document.getElementById("nombre-jugador");
+const pantallaInicial = document.getElementById("pantalla-inicial");
+const pantallaJuego = document.getElementById("pantalla-juego");
+const btnComenzar = document.getElementById("btn-comenzar");
+const inputNombre = document.getElementById("nombre-jugador");
+const botonCambiarJugador = document.getElementById("change-player-btn");
 
 // Variables para el juego
 let paises = []; // Lista de países
@@ -112,6 +112,14 @@ function verificarRespuesta(seleccionado, correcto) {
 
   retroalimentacion.classList.remove("hidden");
 
+  // Deshabilitar todas las opciones
+  const botonesOpciones = document.querySelectorAll(".option");
+  botonesOpciones.forEach(boton => {
+    boton.disabled = true; 
+    boton.style.cursor = "not-allowed";
+    boton.style.opacity = "0.6";
+  });
+
   if (seleccionado === correcto) {
     cantidadAciertos++;
     retroalimentacion.textContent = "¡Correcto!";
@@ -192,6 +200,16 @@ function guardarEnRanking(puntaje, aciertos, tiempo) {
   ranking.sort((a, b) => b.puntaje - a.puntaje || b.aciertos - a.aciertos || a.tiempo - b.tiempo);
   localStorage.setItem("ranking", JSON.stringify(ranking.slice(0, 20)));
 }
+
+botonCambiarJugador.addEventListener("click", () => {
+  // Reiniciar variables y pantallas
+  nombreJugador = ""; // Limpiar el nombre del jugador
+  inputNombre.value = ""; // Limpiar el campo de entrada del nombre
+  
+  // Mostrar pantalla inicial y ocultar pantalla del juego
+  pantallaInicial.classList.remove("hidden");
+  pantallaJuego.classList.add("hidden");
+});
 
 function mostrarRanking() {
   const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
