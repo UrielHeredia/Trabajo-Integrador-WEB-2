@@ -3,25 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Juego de Países</title>
+  <title>¡Mundo Manía!</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Pantalla inicial para comenzar MundoMania -->
   <div id="pantalla-inicial" class="pantalla-inicial">
     <div class="formulario-nombre">
-      <h1>¡Bienvenido al Juego de Países!</h1>
+      <h1>¡Bienvenido a Mundo Manía! ¿Estas listo?</h1>
       <p>Por favor, ingresa tu nombre para comenzar:</p>
       <input type="text" id="nombre-jugador" placeholder="Tu nombre" />
-      <button id="btn-comenzar">Comenzar</button>
+      <button id="btn-comenzar">Comenzar!</button>
     </div>
   </div>
 
+  <!-- Estructura del juego oculta hasta ingresar el nombre -->
   <div id="pantalla-juego" class="contenedor hidden">
-    <h1>Juego de Países</h1>
-
+    <h1>¡Mundo Manía!</h1>
     <div id="contenedor-pregunta">
       <p id="question-text">Cargando pregunta...</p>
       <div id="flag-container" class="hidden">
+        <!-- Imagen de la bandera -->
         <img id="flag-image" src="" alt="Bandera del país" />
       </div>
       <div id="options"></div>
@@ -29,16 +31,28 @@
       <button id="next-btn" class="boton hidden">Siguiente Pregunta</button>
     </div>
 
+
+    <!-- Pantalla de resultados, oculta hasta terminar las preguntas -->
     <div id="result-section" class="hidden">
-      <h2>Resultados</h2>
+      <h2>¡Tus Resultados!</h2>
       <p>Respuestas correctas: <span id="correct-count">0</span></p>
       <p>Respuestas incorrectas: <span id="incorrect-count">0</span></p>
       <p>Tiempo total: <span id="total-time">0</span></p>
       <p>Tiempo promedio por pregunta: <span id="avg-time">0</span></p>
-      <button id="restart-btn" class="boton">Reiniciar Juego</button>
-      <button id="change-player-btn" class="boton">Cambiar de jugador</button>
+      
+
+      <!-- Boton para cambiar de jugador y reiniciar las preguntas -->
+      <div class="botones-resultados">
+        <button id="restart-btn" class="boton">Reiniciar Juego</button>
+        <button id="change-player-btn" class="boton">Cambiar de jugador</button>
+      </div>
+  
+    
+    <div class="ranking-titulo">
+      <h2>Top 20 Rankings!</h2>
     </div>
 
+    <!-- Tabla del ranking de los mejores tambien oculto -->
     <table>
       <thead>
         <tr>
@@ -51,6 +65,7 @@
       <tbody id="ranking-body"></tbody>
     </table>
 
+    <!-- Boton pa resetear el ranking -->
     <button id="reset-ranking-btn">Resetear Rankings</button>
   </div>
 

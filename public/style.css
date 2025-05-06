@@ -1,23 +1,29 @@
+/* Estilo de la zona de las preguntas/post preguntas */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f2f2f2;
+  background-image: url('imag/inicio.png');
+  background-size: cover;
+  background-position: center;
   color: #333;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
   min-height: 100vh;
+ 
 }
 
+/* Estilo pa la pantalla principal */
 .pantalla-inicial {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f2f2f2;
+  width: 100vw;
+  background-image: url('imag/inicio.png');
+  background-size: cover;
+  background-position: center;
 }
 
+/* Estilo para la caja del nombre */
 .formulario-nombre {
   text-align: center;
   background-color: #ffffff;
@@ -26,6 +32,7 @@ body {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Para el titulo */
 .formulario-nombre h1 {
   color: #007acc;
 }
@@ -38,6 +45,7 @@ body {
   border: 1px solid #ccc;
 }
 
+/* Boton comenzar */
 .formulario-nombre button {
   padding: 10px 16px;
   font-size: 1rem;
@@ -53,6 +61,7 @@ body {
   background-color: #005e99;
 }
 
+/* Estilo para la seccion de preguntas */
 .contenedor {
   width: 90%;
   max-width: 700px;
@@ -63,17 +72,20 @@ body {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Titus */
 h1, h2 {
   text-align: center;
   color: #007acc;
 }
 
+/* Texto de la pregunta */
 #question-text {
   font-size: 1.3rem;
   margin-bottom: 20px;
   font-weight: bold;
 }
 
+/* Cajas de opciones */
 #options {
   display: flex;
   flex-direction: column;
@@ -81,6 +93,7 @@ h1, h2 {
   margin-bottom: 20px;
 }
 
+/* Estilo para las opciones */
 .option {
   padding: 12px 20px;
   font-size: 1rem;
@@ -95,12 +108,14 @@ h1, h2 {
   background-color: #c2e5ff;
 }
 
+/* Texto del feedback */
 #feedback {
   font-size: 1.1rem;
   font-weight: bold;
   margin-bottom: 15px;
 }
 
+/* Banderass */
 #flag-container {
   text-align: center;
   margin-bottom: 20px;
@@ -112,6 +127,7 @@ h1, h2 {
   border-radius: 8px;
 }
 
+/* Boton siguiente pregunta! */
 button {
   padding: 10px 16px;
   font-size: 1rem;
@@ -131,30 +147,65 @@ button:hover {
   display: none;
 }
 
+/* Estilo pa los resultados */
 #result-section p {
   font-size: 1.1rem;
   margin: 8px 0;
   text-align: center;
 }
 
-#restart-btn {
-  display: block;
-  margin: 20px auto 0;
-}
-
+/* Estilo de las tablas */
 table {
   width: 100%;
   margin-top: 30px;
   border-collapse: collapse;
 }
 
+/* Celdas de la tabla */
 th, td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
 }
 
+/* Titu */
 thead {
   background-color: #007acc;
   color: white;
+}
+
+/* Boton pa resetear */
+#reset-ranking-btn {
+  display: block;
+  margin: 40px auto 0; 
+  padding: 12px 20px;
+  font-size: 1rem;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#reset-ranking-btn:hover {
+  background-color: #005e99;
+}
+
+/* Cajas de botones post preguntas */
+.botones-resultados {
+  display: flex;
+  justify-content: center; 
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* Estilo de los 2 botones post preguntas */
+.botones-resultados .boton {
+  flex: 1 1 200px; 
+  max-width: 200px; 
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 1rem;
 }

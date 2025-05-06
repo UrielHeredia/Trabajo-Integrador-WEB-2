@@ -1,4 +1,3 @@
-
 // Selección de elementos del DOM
 const textoPregunta = document.getElementById("question-text");
 const contenedorOpciones = document.getElementById("options");
@@ -18,6 +17,7 @@ const pantallaJuego = document.getElementById("pantalla-juego");
 const btnComenzar = document.getElementById("btn-comenzar");
 const inputNombre = document.getElementById("nombre-jugador");
 const botonCambiarJugador = document.getElementById("change-player-btn");
+const botonResetearRanking = document.getElementById("reset-ranking-btn");
 
 // Variables para el juego
 let paises = []; // Lista de países
@@ -29,9 +29,9 @@ let tiempoInicio = 0;
 let tiempoInicioPregunta = 0;
 let tiempoTotal = 0;
 
-const LIMITE_PREGUNTAS = 10; // Total de preguntas por partida
+const LIMITE_PREGUNTAS = 10;
 
-// Cargar datos de la API de países
+// Fetch para cargar datos de la API de países
 fetch("https://restcountries.com/v3.1/all")
   .then(res => res.json())
   .then(data => {
@@ -45,6 +45,7 @@ fetch("https://restcountries.com/v3.1/all")
     console.error("Error al cargar datos de la API:", err);
   });
 
+// Funcion para iniciar
 function iniciarJuego() {
   cantidadPreguntas = 0;
   cantidadAciertos = 0;
@@ -55,6 +56,7 @@ function iniciarJuego() {
   mostrarSiguientePregunta();
 }
 
+// Funcion pa mostrar la prox pregunta
 function mostrarSiguientePregunta() {
   retroalimentacion.classList.add("hidden");
   botonSiguiente.classList.add("hidden");
@@ -74,6 +76,7 @@ function mostrarSiguientePregunta() {
   let respuestaCorrecta, pregunta;
   let opciones = [];
 
+  // Genera pregunta segun tipo
   switch (tipo) {
     case "capital":
       pregunta = `¿Cuál es el país de la siguiente ciudad capital: ${pais.capital[0]}?`;
@@ -82,7 +85,7 @@ function mostrarSiguientePregunta() {
       break;
 
     case "flag":
-      pregunta = `El país representado por esta bandera es:`;
+      pregunta = `El pais representado por esta bandera es:`;
       contenedorBandera.classList.remove("hidden");
       imagenBandera.src = pais.flags.png;
       respuestaCorrecta = pais.name.common;
@@ -96,6 +99,7 @@ function mostrarSiguientePregunta() {
       break;
   }
 
+  // Muestra pregunta y opciones
   textoPregunta.textContent = pregunta;
   opciones.forEach(opcion => {
     const boton = document.createElement("button");
@@ -106,13 +110,14 @@ function mostrarSiguientePregunta() {
   });
 }
 
+// Verifica respuesta
 function verificarRespuesta(seleccionado, correcto) {
   const tiempoPregunta = (Date.now() - tiempoInicioPregunta) / 1000;
   tiempoTotal += tiempoPregunta;
 
   retroalimentacion.classList.remove("hidden");
 
-  // Deshabilitar todas las opciones
+  // Deshabilitar opciones una ves elegida 1
   const botonesOpciones = document.querySelectorAll(".option");
   botonesOpciones.forEach(boton => {
     boton.disabled = true; 
@@ -120,6 +125,7 @@ function verificarRespuesta(seleccionado, correcto) {
     boton.style.opacity = "0.6";
   });
 
+  // Suma/resta
   if (seleccionado === correcto) {
     cantidadAciertos++;
     retroalimentacion.textContent = "¡Correcto!";
@@ -133,6 +139,7 @@ function verificarRespuesta(seleccionado, correcto) {
   botonSiguiente.classList.remove("hidden");
 }
 
+// Boton comenzar juego
 btnComenzar.addEventListener("click", () => {
   nombreJugador = inputNombre.value.trim();
   if (!nombreJugador) {
@@ -140,14 +147,13 @@ btnComenzar.addEventListener("click", () => {
     return;
   }
 
+  //Pasa a las preguntas
   pantallaInicial.classList.add("hidden");
   pantallaJuego.classList.remove("hidden");
 });
 
 
-
-
-
+// Funcion de resultados/ocultar preguntas
 function finalizarJuego() {
   const duracion = (Date.now() - tiempoInicio) / 1000;
   const promedio = tiempoTotal / LIMITE_PREGUNTAS;
@@ -161,13 +167,14 @@ function finalizarJuego() {
   mostrarRanking();
 
   seccionResultados.classList.remove("hidden");
-  textoPregunta.textContent = "Juego finalizado.";
+  textoPregunta.textContent = "";
   contenedorOpciones.innerHTML = "";
   contenedorBandera.classList.add("hidden");
   retroalimentacion.classList.add("hidden");
   botonSiguiente.classList.add("hidden");
 }
 
+// Funcion para generar las opciones
 function generarOpciones(correcta, claveRuta, esNumerico = false) {
   const claves = claveRuta.split(".");
   const obtenerValor = (obj) => claves.reduce((acc, k) => acc && acc[k], obj);
@@ -185,15 +192,18 @@ function generarOpciones(correcta, claveRuta, esNumerico = false) {
   return Array.from(opciones).sort(() => 0.5 - Math.random());
 }
 
+// Obtener un pais
 function obtenerPaisAleatorio() {
   return paises[Math.floor(Math.random() * paises.length)];
 }
 
+// Obtener Pregunta
 function obtenerTipoPreguntaAleatoria() {
   const tipos = ["capital", "flag", "borders"];
   return tipos[Math.floor(Math.random() * tipos.length)];
 }
 
+// Guardar resultadoss
 function guardarEnRanking(puntaje, aciertos, tiempo) {
   const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
   ranking.push({ jugador: nombreJugador, puntaje, aciertos, tiempo }); // AÑADIR 'jugador'
@@ -201,19 +211,20 @@ function guardarEnRanking(puntaje, aciertos, tiempo) {
   localStorage.setItem("ranking", JSON.stringify(ranking.slice(0, 20)));
 }
 
+// Boton para cambiar el jogador
 botonCambiarJugador.addEventListener("click", () => {
-  // Reiniciar variables y pantallas
-  nombreJugador = ""; // Limpiar el nombre del jugador
-  inputNombre.value = ""; // Limpiar el campo de entrada del nombre
+  nombreJugador = ""; 
+  inputNombre.value = ""; 
   
   // Mostrar pantalla inicial y ocultar pantalla del juego
   pantallaInicial.classList.remove("hidden");
   pantallaJuego.classList.add("hidden");
 });
 
+//Muestra el ranking
 function mostrarRanking() {
   const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
-  tablaRanking.innerHTML = ""; // Limpiar tabla antes de agregar filas
+  tablaRanking.innerHTML = "";
   ranking.forEach((entry, index) => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
@@ -227,11 +238,11 @@ function mostrarRanking() {
   });
 }
 
+// Boton de siguiente pregunta y iniciar
 botonSiguiente.addEventListener("click", mostrarSiguientePregunta);
 botonReiniciar.addEventListener("click", iniciarJuego);
 
-const botonResetearRanking = document.getElementById("reset-ranking-btn");
-
+// Boton de resetear el Ranking
 botonResetearRanking.addEventListener("click", () => {
   if (confirm("¿Estás seguro de que deseas borrar todos los rankings?")) {
     localStorage.removeItem("ranking");
