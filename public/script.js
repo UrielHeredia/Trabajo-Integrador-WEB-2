@@ -36,7 +36,7 @@ let tiempoTotal = 0;
 const LIMITE_PREGUNTAS = 10;
 
 // Fetch para cargar datos de la API de países
-fetch("https://restcountries.com/v3.1/all")
+fetch("/api/paises")
   .then(res => res.json())
   .then(data => {
     paises = data.filter(p => p.capital && p.capital.length > 0 && p.borders && p.name?.common && p.flags?.png);
