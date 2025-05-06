@@ -84,6 +84,21 @@ h1, h2 {
   color: #000000ea;
 }
 
+/* Mundo/trofeo  */
+#imagen-debajo-titulo {
+  display: block;
+  margin: 20px auto;
+  max-width: 20%;
+  height: auto;
+}
+
+#imagen-debajo-ranking {
+  display: block;
+  margin: 20px auto;
+  max-width: 20%;
+  height: auto;
+}
+
 /* Texto de la pregunta */
 #question-text {
   font-size: 1.3rem;
