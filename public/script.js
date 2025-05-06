@@ -18,6 +18,10 @@ const btnComenzar = document.getElementById("btn-comenzar");
 const inputNombre = document.getElementById("nombre-jugador");
 const botonCambiarJugador = document.getElementById("change-player-btn");
 const botonResetearRanking = document.getElementById("reset-ranking-btn");
+const sonidoCorrecto = new Audio("imag/correcta.mp3"); 
+const sonidoIncorrecto = new Audio("imag/incorrecta.mp3");
+const sonidoFinal = new Audio("imag/final.mp3");
+const sonidoBoton = new Audio("imag/boton.mp3");
 
 // Variables para el juego
 let paises = []; // Lista de países
@@ -58,6 +62,7 @@ function iniciarJuego() {
 
 // Funcion pa mostrar la prox pregunta
 function mostrarSiguientePregunta() {
+  sonidoBoton.play();
   retroalimentacion.classList.add("hidden");
   botonSiguiente.classList.add("hidden");
   contenedorOpciones.innerHTML = "";
@@ -125,15 +130,17 @@ function verificarRespuesta(seleccionado, correcto) {
     boton.style.opacity = "0.6";
   });
 
-  // Suma/resta
+  // Suma/resta correcto/incorrecto
   if (seleccionado === correcto) {
     cantidadAciertos++;
     retroalimentacion.textContent = "¡Correcto!";
     retroalimentacion.style.color = "green";
+    sonidoCorrecto.play();
   } else {
     cantidadErrores++;
     retroalimentacion.textContent = `Incorrecto. La respuesta correcta era: ${correcto}`;
     retroalimentacion.style.color = "red";
+    sonidoIncorrecto.play();
   }
 
   botonSiguiente.classList.remove("hidden");
@@ -141,6 +148,7 @@ function verificarRespuesta(seleccionado, correcto) {
 
 // Boton comenzar juego
 btnComenzar.addEventListener("click", () => {
+  sonidoBoton.play();
   nombreJugador = inputNombre.value.trim();
   if (!nombreJugador) {
     alert("Por favor, ingresa tu nombre.");
@@ -155,6 +163,7 @@ btnComenzar.addEventListener("click", () => {
 
 // Funcion de resultados/ocultar preguntas
 function finalizarJuego() {
+  sonidoFinal.play();
   const duracion = (Date.now() - tiempoInicio) / 1000;
   const promedio = tiempoTotal / LIMITE_PREGUNTAS;
 
@@ -213,6 +222,7 @@ function guardarEnRanking(puntaje, aciertos, tiempo) {
 
 // Boton para cambiar el jogador
 botonCambiarJugador.addEventListener("click", () => {
+  sonidoBoton.play();
   nombreJugador = ""; 
   inputNombre.value = ""; 
   
@@ -244,6 +254,7 @@ botonReiniciar.addEventListener("click", iniciarJuego);
 
 // Boton de resetear el Ranking
 botonResetearRanking.addEventListener("click", () => {
+  sonidoBoton.play();
   if (confirm("¿Estás seguro de que deseas borrar todos los rankings?")) {
     localStorage.removeItem("ranking");
     mostrarRanking(); // Actualiza la tabla

@@ -26,15 +26,18 @@ body {
 /* Estilo para la caja del nombre */
 .formulario-nombre {
   text-align: center;
-  background-color: #ffffff;
+  background-image: url('imag/back.jpg');
+  background-size: cover;
+  background-position: center;
   padding: 20px;
   border-radius: 12px;
+  border: 1px solid #000000;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Para el titulo */
 .formulario-nombre h1 {
-  color: #007acc;
+  color: #000000ea;
 }
 
 .formulario-nombre input {
@@ -51,7 +54,7 @@ body {
   font-size: 1rem;
   background-color: #007acc;
   color: white;
-  border: none;
+  border: 1px solid #000000;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -66,7 +69,10 @@ body {
   width: 90%;
   max-width: 700px;
   margin: 40px auto;
-  background-color: #ffffff;
+  background-image: url('imag/back.jpg');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #000000;
   border-radius: 12px;
   padding: 30px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
@@ -75,7 +81,7 @@ body {
 /* Titus */
 h1, h2 {
   text-align: center;
-  color: #007acc;
+  color: #000000ea;
 }
 
 /* Texto de la pregunta */
@@ -97,8 +103,9 @@ h1, h2 {
 .option {
   padding: 12px 20px;
   font-size: 1rem;
-  background-color: #e0f0ff;
-  border: 2px solid #007acc;
+  color: #000000ea;
+  background-color: #e6f148;
+  border: 2px solid #000000;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -123,7 +130,7 @@ h1, h2 {
 
 #flag-image {
   width: 160px;
-  border: 2px solid #007acc;
+  border: 2px solid #000000;
   border-radius: 8px;
 }
 
@@ -131,7 +138,7 @@ h1, h2 {
 button {
   padding: 10px 16px;
   font-size: 1rem;
-  border: none;
+  border: 1px solid #000000;
   background-color: #007acc;
   color: white;
   border-radius: 6px;
@@ -163,7 +170,7 @@ table {
 
 /* Celdas de la tabla */
 th, td {
-  border: 1px solid #ccc;
+  border: 1px solid #000000;
   padding: 8px;
   text-align: center;
 }
@@ -182,7 +189,7 @@ thead {
   font-size: 1rem;
   background-color: #007acc;
   color: white;
-  border: none;
+  border: 1px solid #000000;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
